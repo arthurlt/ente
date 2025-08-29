@@ -23,3 +23,8 @@ smtp:
   email: no-reply@arthur.computer
   sender-name: ente
   encryption: tls
+
+webauthn:
+  rpid: ente.arthur.computer
+  rporigins:
+    - accounts.ente.arthur.computer
