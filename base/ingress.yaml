@@ -1,0 +1,57 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ente
+spec:
+  rules:
+    - host: accounts.ente.example
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: ente-web
+                port:
+                  name: accounts
+    - host: albums.ente.example
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: ente-web
+                port:
+                  name: albums
+    - host: api.ente.example
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: ente-museum
+                port:
+                  name: http
+    - host: cast.ente.example
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: ente-web
+                port:
+                  name: cast
+    - host: web.ente.example
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: ente-web
+                port:
+                  name: web

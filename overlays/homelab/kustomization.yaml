@@ -1,0 +1,65 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+labels:
+  - pairs:
+      app.kubernetes.io/name: ente
+      app.kubernetes.io/part-of: ente
+
+namespace: ente
+
+resources:
+  - ../../base
+  - external-secret.yaml
+
+components:
+  - ../../components/cloudnativepg
+  - ../../components/museum-config
+  - ../../components/museum-secrets
+
+patches:
+  - target:
+      group: postgresql.cnpg.io
+      version: v1
+      kind: Cluster
+      name: ente-database
+    path: cluster.yaml
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: ente-web
+    path: deployment.patch.yaml
+  - target:
+      group: networking.k8s.io
+      version: v1
+      kind: Ingress
+      name: ente
+    path: ingress.patch.yaml
+
+configMapGenerator:
+  - name: ente-domain
+    literals:
+      - domain=arthur.computer
+  - name: ente-museum-config
+    files:
+      - museum.yaml
+    options:
+      labels:
+        app.kubernetes.io/component: museum
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: ente-domain
+      fieldPath: data.domain
+    targets:
+      - select:
+          kind: Ingress
+          name: ente
+        fieldPaths:
+          - spec.rules.*.host
+        options:
+          delimiter: "."
+          index: 2

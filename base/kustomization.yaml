@@ -1,0 +1,21 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+labels:
+  - pairs:
+      app.kubernetes.io/name: ente
+      app.kubernetes.io/part-of: ente
+    includeTemplates: true
+    includeSelectors: true
+
+images:
+  - name: ghcr.io/ente-io/server
+    newTag: 1fe2a941ffa72f986be76099e7a75a21fc2fee8e
+  - name: ghcr.io/ente-io/web
+    newTag: 29b12fc6b571551a51b84c1b9abc4908c53fff24
+
+resources:
+  - deployment.yaml
+  - ingress.yaml
+  - service.yaml

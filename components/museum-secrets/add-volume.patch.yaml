@@ -1,0 +1,14 @@
+---
+- op: add
+  path: /spec/template/spec/volumes/-
+  value:
+    name: ente-museum-secrets
+    secret:
+      secretName: ente-museum-secrets
+- op: add
+  path: /spec/template/spec/containers/0/volumeMounts/-
+  value:
+    name: ente-museum-secrets
+    mountPath: /credentials.yaml
+    subPath: credentials.yaml
+    readOnly: true

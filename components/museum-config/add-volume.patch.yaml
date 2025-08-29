@@ -1,0 +1,14 @@
+---
+- op: add
+  path: /spec/template/spec/volumes/-
+  value:
+    name: ente-museum-config
+    configMap:
+      name: ente-museum-config
+- op: add
+  path: /spec/template/spec/containers/0/volumeMounts/-
+  value:
+    name: ente-museum-config
+    mountPath: /museum.yaml
+    subPath: museum.yaml
+    readOnly: true

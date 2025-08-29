@@ -1,0 +1,41 @@
+---
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: ENTE_DB_HOST
+    valueFrom:
+      secretKeyRef:
+        name: ente-database-app
+        key: host
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: ENTE_DB_PORT
+    valueFrom:
+      secretKeyRef:
+        name: ente-database-app
+        key: port
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: ENTE_DB_NAME
+    valueFrom:
+      secretKeyRef:
+        name: ente-database-app
+        key: dbname
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: ENTE_DB_USER
+    valueFrom:
+      secretKeyRef:
+        name: ente-database-app
+        key: username
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: ENTE_DB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: ente-database-app
+        key: password

@@ -1,0 +1,48 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ente-museum
+  labels:
+    app.kubernetes.io/component: museum
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+      protocol: TCP
+  selector:
+    app.kubernetes.io/component: museum
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ente-web
+  labels:
+    app.kubernetes.io/component: web
+spec:
+  type: ClusterIP
+  ports:
+    - name: web
+      port: 3000
+      targetPort: web
+      protocol: TCP
+    - name: accounts
+      port: 3001
+      targetPort: accounts
+      protocol: TCP
+    - name: albums
+      port: 3002
+      targetPort: albums
+      protocol: TCP
+    - name: auth
+      port: 3003
+      targetPort: auth
+      protocol: TCP
+    - name: cast
+      port: 3004
+      targetPort: cast
+      protocol: TCP
+  selector:
+    app.kubernetes.io/component: web

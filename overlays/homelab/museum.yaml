@@ -1,0 +1,25 @@
+apps:
+  public-albums: https://albums.ente.arthur.computer
+  public-locker: https://locker.ente.arthur.computer
+  cast: https://cast.ente.arthur.computer
+  accounts: https://accounts.ente.arthur.computer
+  family: https://family.ente.arthur.computer
+  custom-domain:
+      cname: https://my.ente.arthur.computer
+
+s3:
+  b2-eu-cen:
+    # we want to use SSL
+    are_local_buckets: false
+    # R2 doesn't support subdomain-style
+    use_path_style_urls: true
+    # R2 docs suggest setting to 'auto'
+    region: auto
+    bucket: ente-primary
+
+smtp:
+  host: smtp.fastmail.com
+  port: 587
+  email: no-reply@arthur.computer
+  sender-name: ente
+  encryption: tls
