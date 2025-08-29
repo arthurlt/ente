@@ -1,11 +1,14 @@
 apps:
   public-albums: https://albums.ente.arthur.computer
-  public-locker: https://locker.ente.arthur.computer
+  # appears to be in development
+  # public-locker: https://locker.ente.arthur.computer
   cast: https://cast.ente.arthur.computer
   accounts: https://accounts.ente.arthur.computer
-  family: https://family.ente.arthur.computer
-  custom-domain:
-      cname: https://my.ente.arthur.computer
+  # appears to be a landing page
+  # family: https://family.ente.arthur.computer
+  # this will take more work to properly support
+  # custom-domain:
+  #     cname: my.ente.arthur.computer
 
 s3:
   b2-eu-cen:
