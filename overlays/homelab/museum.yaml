@@ -27,4 +27,4 @@ smtp:
 webauthn:
   rpid: ente.arthur.computer
   rporigins:
-    - accounts.ente.arthur.computer
+    - https://accounts.ente.arthur.computer
