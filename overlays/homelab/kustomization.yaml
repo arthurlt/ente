@@ -29,7 +29,7 @@ patches:
       version: v1
       kind: Cluster
       name: ente-database
-    path: cluster.yaml
+    path: cluster.patch.yaml
   - target:
       group: apps
       version: v1

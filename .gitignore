@@ -1,2 +1,5 @@
 # Ignore Obsidian settings
 .obsidian/
+
+# Ignore Wrangler state/config
+.wrangler/

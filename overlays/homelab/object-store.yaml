@@ -1,0 +1,20 @@
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: ente-database-s3
+  labels:
+    app.kubernetes.io/component: database
+spec:
+  configuration:
+    destinationPath: s3://cnpg-backups
+    endpointURL: https://f061e3d9b3cb2a466cdbef9ea19cee24.r2.cloudflarestorage.com
+    s3Credentials:
+      accessKeyId:
+        name: ente-database-s3
+        key: accessKey
+      secretAccessKey:
+        name: ente-database-s3
+        key: secretKey
+    wal:
+      maxParallel: 8
+  retentionPolicy: '6m'
