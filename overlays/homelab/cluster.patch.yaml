@@ -16,4 +16,4 @@
     - name: barman-cloud.cloudnative-pg.io
       isWALArchiver: true
       parameters:
-        barmanObjectName: ente-database-s3
+        barmanObjectName: ente-database-bucket
