@@ -5,8 +5,20 @@ kind: Component
 patches:
   - target:
       kind: Deployment
+      name: ente-museum
+    path: add-apps.patch.yaml
+  - target:
+      kind: Deployment
+      name: ente-museum
+    path: add-webauthn.patch.yaml
+  - target:
+      kind: Deployment
+      name: ente-museum
+    path: add-smtp.patch.yaml
+  - target:
+      kind: Deployment
       name: ente-web
-    path: deployment.patch.yaml
+    path: add-origins.patch.yaml
 
 replacements:
   # assumes there will be a ConfigMap named ente-vars with a hostname key
@@ -27,8 +39,33 @@ replacements:
           kind: Deployment
           name: ente-web
         fieldPaths:
-          - spec.template.spec.containers.*.env.[name=ENTE_API_ORIGIN].value
-          - spec.template.spec.containers.*.env.[name=ENTE_ALBUMS_ORIGIN].value
+          - spec.template.spec.containers.[name=^web$].env.[name=^ENTE_API_ORIGIN$].value
+          - spec.template.spec.containers.[name=^web$].env.[name=^ENTE_ALBUMS_ORIGIN$].value
         options:
           delimiter: "."
           index: 2
+      - select:
+          kind: Deployment
+          name: ente-museum
+        fieldPaths:
+          - spec.template.spec.containers.[name=^museum$].env.[name=^ENTE_APPS_].value
+          - spec.template.spec.containers.[name=^museum$].env.[name=^ENTE_WEBAUTHN_RPORIGINS$].value
+        options:
+          delimiter: "."
+          index: 2
+      - select:
+          kind: Deployment
+          name: ente-museum
+        fieldPaths:
+          - spec.template.spec.containers.*.env.[name=^ENTE_WEBAUTHN_RPID$].value
+        options:
+          delimiter: "."
+          index: 1
+      - select:
+          kind: Deployment
+          name: ente-museum
+        fieldPaths:
+          - spec.template.spec.containers.*.env.[name=^ENTE_SMTP_EMAIL$].value
+        options:
+          delimiter: "@"
+          index: 1

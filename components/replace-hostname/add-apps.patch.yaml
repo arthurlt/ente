@@ -1,0 +1,38 @@
+---
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: ENTE_APPS_PUBLIC_ALBUMS
+    value: https://albums.ente.example
+
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: ENTE_APPS_CAST
+    value: https://cast.ente.example
+
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: ENTE_APPS_ACCOUNTS
+    value: https://accounts.ente.example
+# appears to be in development
+# - op: add
+#   path: /spec/template/spec/containers/0/env/-
+#   value:
+#     name: ENTE_APPS_PUBLIC_LOCKER
+#     value: https://locker.ente.example
+
+# appears to only be a landing page
+# - op: add
+#   path: /spec/template/spec/containers/0/env/-
+#   value:
+#     name: ENTE_APPS_FAMILY
+#     value: https://family.ente.example
+
+# need to research how to handle certificates
+# - op: add
+#   path: /spec/template/spec/containers/0/env/-
+#   value:
+#     name: ENTE_APPS_CUSTOM_DOMAIN_CNAME
+#     value: https://my.ente.example

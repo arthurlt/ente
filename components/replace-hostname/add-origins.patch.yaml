@@ -4,6 +4,7 @@
   value:
     name: ENTE_API_ORIGIN
     value: https://api.ente.example
+
 - op: add
   path: /spec/template/spec/containers/0/env/-
   value:

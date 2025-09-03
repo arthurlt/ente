@@ -1,0 +1,12 @@
+---
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: ENTE_WEBAUTHN_RPID
+    value: ente.example
+
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: ENTE_WEBAUTHN_RPORIGINS
+    value: https://accounts.ente.example
