@@ -4,16 +4,16 @@ kind: Deployment
 metadata:
   name: ente-museum
   labels:
-    app.kubernetes.io/component: museum
+    app.kubernetes.io/component: api-server
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/component: museum
+      app.kubernetes.io/component: api-server
   template:
     metadata:
       labels:
-        app.kubernetes.io/component: museum
+        app.kubernetes.io/component: api-server
     spec:
       securityContext:
         fsGroup: 1000
@@ -71,16 +71,16 @@ kind: Deployment
 metadata:
   name: ente-web
   labels:
-    app.kubernetes.io/component: web
+    app.kubernetes.io/component: frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/component: web
+      app.kubernetes.io/component: frontend
   template:
     metadata:
       labels:
-        app.kubernetes.io/component: web
+        app.kubernetes.io/component: frontend
     spec:
       securityContext:
         # fsGroup: 1000

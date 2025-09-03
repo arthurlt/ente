@@ -7,30 +7,31 @@ You can use the base manifests with your own overlays following the pattern docu
 This will guide you through an opinionated way to run your own self-hosted instance of Ente on an existing Kubernetes cluster. You can also use the Kustomize base and  
 ## Prerequisites/Assumptions:
 - Custom domain
-	- With Fastmail setup
-	- With Cloudflare DNS setup with a wildcard (`*.ente.<your_domain>`) to your Kubernetes Ingress IP
+    - With Fastmail setup
+    - With Cloudflare DNS setup with a wildcard (`*.ente.<your_domain>`) to your Kubernetes Ingress IP
 - A Cloudflare account
 - A 1Password account
 - A Fastmail account
 - These tools:
-	- `bash`
-	- `kubectl`
-	- `npm`
-	- `op`[^3]
+    - `bash`
+    - `kubectl`
+    - `npm`
+    - `op`[^3]
+    - `git`
 - A Kubernetes cluster with:
-	- Any Ingress Controller
-	- CloudNativePG[^4]
-	- External Secrets Operator[^5]
-	- Local Path Provisioner[^6]
-	- cert-manager[^7]
+    - Any Ingress Controller
+    - CloudNativePG[^4]
+    - External Secrets Operator[^5]
+    - Local Path Provisioner[^6]
+    - cert-manager[^7]
 
 # Configuring Secrets
 ## Create the vault
 We'll want to create a vault we can share with our service account the External Secrets Operator will use.
 ```bash
 op vault create Kubernetes \
-	--description 'Secrets shared with External Secrets Operator in Kubernetes' \
-	--icon application
+    --description 'Secrets shared with External Secrets Operator in Kubernetes' \
+    --icon application
 ```
 
 ## Create the service account
@@ -39,24 +40,9 @@ We'll need to create a service account for External Secrets Operator to access o
 > This assumes you installed External Secrets Operator in the `external-secrets` namespace on your Kubernetes cluster. 
 ```bash
 kubectl create secret generic onepassword-token \
-	--namespace external-secrets \
-	--from-literal=token=$(op service-account create Kubernetes --vault Kubernetes:read_items --raw)
-cat << 'EOF' > /tmp/secret-store.yaml
-apiVersion: external-secrets.io/v1
-kind: ClusterSecretStore
-metadata:
-  name: onepassword
-spec:
-  provider:
-    onepasswordSDK:
-      vault: Kubernetes
-      auth:
-        serviceAccountSecretRef:
-          namespace: external-secrets
-          name: onepassword-token
-          key: token
-EOF
-kubectl apply --namespace external-secrets --filename /tmp/secret-store.yaml
+    --namespace external-secrets \
+    --from-literal=token=$(op service-account create Kubernetes --vault Kubernetes:read_items --raw)
+kubectl apply --namespace external-secrets --filename 'https://raw.githubusercontent.com/arthurlt/ente/main/docs/files/cluster-secret-store.yaml'
 ```
 > [!CAUTION]
 > The `ClusterSecretStore` can be referenced by `ExternalSecrets` in all namespaces in the cluster.
@@ -65,12 +51,12 @@ kubectl apply --namespace external-secrets --filename /tmp/secret-store.yaml
 Ente provides default values for these, but we need to generate our own. Ente's official self-hosting quickstart script uses these same one-liners to generate a key, hash, and JWT secret.[^8]
 ```bash
 op item create \
-	--vault Kubernetes \
-	--category Password \
-	--title 'Ente Secrets' - \
-	key[password]=$(head -c 32 /dev/urandom | base64 | tr -d '\n') \
-	hash[password]=$(head -c 64 /dev/urandom | base64 | tr -d '\n') \
-	jwt[password]=$(head -c 32 /dev/urandom | base64 | tr -d '\n' | tr '+/' '-_')
+    --vault Kubernetes \
+    --category Password \
+    --title 'Ente Secrets' - \
+    key[password]=$(head -c 32 /dev/urandom | base64 | tr -d '\n') \
+    hash[password]=$(head -c 64 /dev/urandom | base64 | tr -d '\n') \
+    jwt[password]=$(head -c 32 /dev/urandom | base64 | tr -d '\n' | tr '+/' '-_')
 ```
 
 # Configuring Storage
@@ -119,54 +105,54 @@ wrangler r2 bucket create cnpg
 We'll need to create API tokens and store them in 1Password.
 1. Login to the [Cloudflare dashboard](https://dash.cloudflare.com/).
 2. Select 'R2 object storage' on the left sidebar.
-3. From the overview page select the dropdown labeled '{} API'. ![[r2-overview-page.png]]
+3. From the overview page select the dropdown labeled '{} API'.
 4. Select 'Manage API tokens'.
 5. From the token management page, select 'Create Account API token'.
 6. Fill-out the token creation form for your Ente bucket.
-	1. Input `ente` for the name.
-	2. Select 'Object Read & Write' for the token permissions.
-	3. Check 'Apply to specific buckets only' and choose your Ente bucket from the dropdown.
-	4. Select 'Create Account API Token'.
-	5. Save the values in 1Password, **replacing the variables with their values**.
-	   ```bash
-		op item create \
-			--vault Kubernetes \
-			--category 'API Credential' \
-		    --title 'R2 - ente' - \
-		    'access key[password]'=$ACCESS_KEY_ID \
-		    'secret key[password]'=$SECRET_ACCESS_KEY \
-		    endpoint[url]=$DEFAULT_ENDPOINT \
-		    token[password]=$TOKEN_VALUE
-		# remove the date fields (optional)
-		op item edit 'R2 - ente' \
-			--vault Kubernetes \
-			expires[delete] \
-			'valid from[delete]'
-		```
-	6. Select 'Finish'.
+    1. Input `ente` for the name.
+    2. Select 'Object Read & Write' for the token permissions.
+    3. Check 'Apply to specific buckets only' and choose your Ente bucket from the dropdown.
+    4. Select 'Create Account API Token'.
+    5. Save the values in 1Password, **replacing the variables with their values**.
+        ```bash
+        op item create \
+            --vault Kubernetes \
+            --category 'API Credential' \
+            --title 'R2 - ente' - \
+            'access key[password]'=$ACCESS_KEY_ID \
+            'secret key[password]'=$SECRET_ACCESS_KEY \
+            endpoint[url]=$DEFAULT_ENDPOINT \
+            token[password]=$TOKEN_VALUE
+        # remove the date fields (optional)
+        op item edit 'R2 - ente' \
+            --vault Kubernetes \
+            expires[delete] \
+            'valid from[delete]'
+        ```
+    6. Select 'Finish'.
 7. Select 'Create Account API token' again.
 8. Fill-out the token creation form for your CNPG bucket.
-	1. Input `cnpg` for  the name.
-	2. Select 'Object Read & Write' for the token permissions.
-	3. Check 'Apply to specific buckets only' and choose your CNPG bucket from the dropdown.
-	4. Select 'Create Account API Token'.
-	5. Save the values in 1Password, **replacing the variables with their values**.
-	   ```bash
-		op item create \
-			--vault Kubernetes \
-			--category 'API Credential' \
-		    --title 'R2 - cpng' - \
-		    'access key[password]'=$ACCESS_KEY_ID \
-		    'secret key[password]'=$SECRET_ACCESS_KEY \
-		    endpoint[url]=$DEFAULT_ENDPOINT \
-		    token[password]=$TOKEN_VALUE
-		# remove the date fields (optional)
-		op item edit 'R2 - cnpg' \
-			--vault Kubernetes \
-			expires[delete] \
-			'valid from[delete]'
-		```
-	6. Select 'Finish'.
+    9. Input `cnpg` for  the name.
+    10. Select 'Object Read & Write' for the token permissions.
+    11. Check 'Apply to specific buckets only' and choose your CNPG bucket from the dropdown.
+    12. Select 'Create Account API Token'.
+    13. Save the values in 1Password, **replacing the variables with their values**.
+        ```bash
+        op item create \
+            --vault Kubernetes \
+            --category 'API Credential' \
+            --title 'R2 - cpng' - \
+            'access key[password]'=$ACCESS_KEY_ID \
+            'secret key[password]'=$SECRET_ACCESS_KEY \
+            endpoint[url]=$DEFAULT_ENDPOINT \
+            token[password]=$TOKEN_VALUE
+        # remove the date fields (optional)
+        op item edit 'R2 - cnpg' \
+            --vault Kubernetes \
+            expires[delete] \
+            'valid from[delete]'
+        ```
+    14. Select 'Finish'.
 
 # Configuring Email
 We'll use Fastmail to handle SMTP. It should already be configured to send/receive from the domain you plan you use.
@@ -180,25 +166,104 @@ Fastmail requires an app password to authenticate with any third-party client.
 3. Select 'Manage app passwords and access' near the bottom.
 4. Under 'App passwords', select '+ New app password'.
 5. Fill out the new app password form.
-	1. Select the 'Name' dropdown, choose 'Custom...', and enter `ente`.
-	2. Select the 'Access' dropdown and select 'SMTP'.
-	3. Select 'Generate password'.
+    1. Select the 'Name' dropdown, choose 'Custom...', and enter `ente`.
+    2. Select the 'Access' dropdown and select 'SMTP'.
+    3. Select 'Generate password'.
 6. Save the value in 1Password, **replacing the variables with their values**.
-	```bash
-	op item create \
-		--vault Kubernetes \
-		--category 'Email Account' \
-		--title 'Fastmail - ente' - \
-		SMTP.username=$FASTMAIL_LOGIN \
-		SMTP.password=$APP_PASSWORD \
-		SMTP.'SMTP Server'=smtp.fastmail.com \
-		SMTP.'port number'=587 \
-		SMTP.security=TLS \
-		SMTP.'auth method'=Password
-	```
+    ```bash
+    op item create \
+        --vault Kubernetes \
+        --category 'Email Account' \
+        --title 'Fastmail - ente' - \
+        SMTP.username=$FASTMAIL_LOGIN \
+        SMTP.password=$APP_PASSWORD \
+        SMTP.'SMTP Server'=smtp.fastmail.com \
+        SMTP.'port number'=587 \
+        SMTP.security=TLS \
+        SMTP.'auth method'=Password
+    ```
 > [!IMPORTANT]
 > The username will be the email/username **you** login to Fastmail with, not the email Ente will be using to send.
 
+# Configuring Certificates
+We'll be using cert-manager, Let's Encrypt, and Cloudflare DNS to automatically provision and rotate TLS certificates. 
+
+## Create Cloudflare API Token
+We'll solve Let's Encrypt's ACME DNS01 challenge with Cloudflare. 
+1. Login to the [Cloudflare dashboard](https://dash.cloudflare.com/).
+2. Select 'Manage Account' then 'Account API tokens' on the left sidebar.
+3. Select 'Create Token'
+4. Under 'API token templates' find 'Edit zone DNS' and select 'Use template'.
+    1. Select the pencil icon next to 'Token name' and input `cert-manager`.
+    2. Under 'Permissions' select '+ Add more'.
+    3. For the second permissions row select `Zone`, `Zone`, and `Read`.
+    4. Under 'Zone Resources' select `Include`, `All zones from an account`, and select your account from the last dropdown. 
+    5. Select 'Continue to summary'.
+    6. Select 'Create Token'.
+    7. Save the value in 1Password, **replacing the variable with the token**.
+        ```bash
+        op item create \
+            --vault Kubernetes \
+            --category 'API Credential' \
+            --title 'Cloudflare - cert-manager' - \
+            credential=$API_TOKEN \
+            type='Bearer Token'
+        # remove the date fields (optional)
+        op item edit 'Cloudflare - cert-manager' \
+            --vault Kubernetes \
+            expires[delete] \
+            'valid from[delete]'
+        ```
+
+## Create ExternalSecret
+(TODO)
+> [!NOTE]
+> This assumes you installed cert-manager in the `cert-manager` namespace on your Kubernetes cluster. 
+```bash
+kubectl apply --namespace cert-manager --filename 'https://raw.githubusercontent.com/arthurlt/ente/main/docs/files/external-secret.yaml'
+```
+
+# Replace
+(TODO)
+Replace the values the Homelab overlay, **replacing the variable with your domain**.
+```bash
+git clone https://github.com/arthurlt/ente.git
+sed --in-place 's/arthur.computer/$CUSTOM_DOMAIN/g' ente/overlays/homelab/*.yaml
+sed --in-place 's|https://f061e3d9b3cb2a466cdbef9ea19cee24.r2.cloudflarestorage.com|$R2_ENDPOINT|g' ente/overlays/homelab/*.yaml
+```
+
+---
+Caused by: Error validating origin
+= the webauthn 
+
+---
+# Sources:
+help.ente.io/self-hosting/installation/env-var
+https://help.ente.io/self-hosting/installation/config
+https://help.ente.io/self-hosting/administration/object-storage
+https://help.ente.io/self-hosting/installation/post-install
+https://help.ente.io/self-hosting/administration/cli
+https://developers.cloudflare.com/r2/buckets/cors
+https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/
+https://kubectl.docs.kubernetes.io/references/kustomize/builtins/
+https://kubectl.docs.kubernetes.io/guides/config_management/components/
+https://cloudnative-pg.io/documentation/1.27/applications/
+https://cloudnative-pg.io/documentation/1.27/samples/
+
+---
+# TODO
+- Cilium network policies component
+- Add initContainer to museum to wait for DB
+- Cleanup 1Password CLI stuff (templates?)
+- Create cert-manager component?
+- Create External Secret Operator component?
+
+I intend to write future guides on:
+- Setting up a Kubernetes cluster using Talos Linux
+- Installing CloudNativePG on your K8s cluster
+- Installing cert-manager on your K8s cluster and configuring with Cloudflare DNS
+- Installing external secrets operator on your K8s cluster and configuring with 1Password
+- Setting up [Garage](https://garagehq.deuxfleurs.fr/) for object storage (and migrating to it)
 
 [^1]: https://help.ente.io/self-hosting/administration/object-storage#cors-cross-origin-resource-sharing
 

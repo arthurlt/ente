@@ -1,0 +1,14 @@
+---
+labels:
+  - kind: ExternalSecret
+    path: spec/target/template/metadata/labels
+    create: true
+
+commonLabels:
+  - kind: ExternalSecret
+    path: spec/target/template/metadata/labels
+    create: true
+
+nameReference:
+  - kind: ExternalSecret
+    path: spec/target/template/name

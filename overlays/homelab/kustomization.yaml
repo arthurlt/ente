@@ -5,9 +5,9 @@ kind: Kustomization
 labels:
   - pairs:
       app.kubernetes.io/name: ente
-      app.kubernetes.io/part-of: homelab-ente
-    includeTemplates: true
+      app.kubernetes.io/part-of: ente
     includeSelectors: true
+    includeTemplates: true
   - pairs:
       app.kubernetes.io/version: "20250901"
 
@@ -22,6 +22,9 @@ components:
   - ../../components/cloudnativepg
   - ../../components/museum-config
   - ../../components/museum-secrets
+  # - ../../components/namespace
+  - ../../components/external-secrets
+  - ../../components/replace-hostname
 
 patches:
   - target:
@@ -31,12 +34,6 @@ patches:
       name: ente-database
     path: cluster.patch.yaml
   - target:
-      group: apps
-      version: v1
-      kind: Deployment
-      name: ente-web
-    path: deployment.patch.yaml
-  - target:
       group: networking.k8s.io
       version: v1
       kind: Ingress
@@ -44,27 +41,26 @@ patches:
     path: ingress.patch.yaml
 
 configMapGenerator:
-  - name: ente-domain
+  - name: ente-vars
     literals:
-      - domain=arthur.computer
+      - hostname=arthur.computer
   - name: ente-museum-config
     files:
       - museum.yaml
     options:
       labels:
-        app.kubernetes.io/component: museum
-
-replacements:
-  - source:
-      kind: ConfigMap
-      name: ente-domain
-      fieldPath: data.domain
-    targets:
-      - select:
-          kind: Ingress
-          name: ente
-        fieldPaths:
-          - spec.rules.*.host
-        options:
-          delimiter: "."
-          index: 2
+        app.kubernetes.io/component: api-server
+# replacements:
+#   - source:
+#       kind: Ingress
+#       name: ente-domain
+#       fieldPath: metadata.annotations.baseHostname
+#     targets:
+#       - select:
+#           kind: Ingress
+#           name: ente
+#         fieldPaths:
+#           - spec.rules.*.host
+#         options:
+#           delimiter: "."
+#           index: 2

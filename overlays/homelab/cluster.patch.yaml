@@ -9,9 +9,10 @@
     size: 20Gi
     resizeInUseVolumes: true
 - op: add
-  path: /spec/plugins/-
+  path: /spec
   value:
-    name: barman-cloud.cloudnative-pg.io
-    isWALArchiver: true
-    parameters:
-      barmanObjectName: ente-database-s3
+    plugins:
+      - name: barman-cloud.cloudnative-pg.io
+        isWALArchiver: true
+        parameters:
+          barmanObjectName: ente-database-s3

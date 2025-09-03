@@ -3,9 +3,9 @@
   path: /spec/template/spec/containers/0/env/-
   value:
     name: ENTE_API_ORIGIN
-    value: https://api.ente.arthur.computer
+    value: https://api.ente.example
 - op: add
   path: /spec/template/spec/containers/0/env/-
   value:
     name: ENTE_ALBUMS_ORIGIN
-    value: https://albums.ente.arthur.computer
+    value: https://albums.ente.example
