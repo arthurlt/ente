@@ -17,6 +17,8 @@ labels:
 resources:
   - ../../base
   - external-secret.yaml
+  - object-store.yaml
+  - scheduled-backup.yaml
 
 components:
   - ../../components/cloudnativepg
