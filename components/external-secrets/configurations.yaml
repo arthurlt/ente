@@ -11,4 +11,6 @@ commonLabels:
 
 nameReference:
   - kind: ExternalSecret
-    path: spec/target/template/name
+    fieldSpecs:
+      - kind: Secret
+        path: spec/target/template/name
