@@ -5,6 +5,7 @@
     name: ente-museum-secrets
     secret:
       secretName: ente-museum-secrets
+
 - op: add
   path: /spec/template/spec/containers/0/volumeMounts/-
   value:

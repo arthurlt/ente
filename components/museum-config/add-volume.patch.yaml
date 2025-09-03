@@ -5,6 +5,7 @@
     name: ente-museum-config
     configMap:
       name: ente-museum-config
+
 - op: add
   path: /spec/template/spec/containers/0/volumeMounts/-
   value:

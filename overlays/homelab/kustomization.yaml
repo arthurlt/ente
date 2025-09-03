@@ -22,7 +22,6 @@ components:
   - ../../components/cloudnativepg
   - ../../components/museum-config
   - ../../components/museum-secrets
-  # - ../../components/namespace
   - ../../components/external-secrets
   - ../../components/replace-hostname
 
@@ -50,17 +49,3 @@ configMapGenerator:
     options:
       labels:
         app.kubernetes.io/component: api-server
-# replacements:
-#   - source:
-#       kind: Ingress
-#       name: ente-domain
-#       fieldPath: metadata.annotations.baseHostname
-#     targets:
-#       - select:
-#           kind: Ingress
-#           name: ente
-#         fieldPaths:
-#           - spec.rules.*.host
-#         options:
-#           delimiter: "."
-#           index: 2
