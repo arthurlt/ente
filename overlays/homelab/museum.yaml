@@ -6,7 +6,7 @@ s3:
     use_path_style_urls: true
     # R2 docs suggest setting to 'auto'
     region: auto
-    bucket: ente-primary
+    bucket: ente
 
 smtp:
   host: smtp.fastmail.com
