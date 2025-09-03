@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/component: database
 spec:
   configuration:
-    destinationPath: s3://cnpg-backups
+    destinationPath: s3://cnpg
     endpointURL: https://f061e3d9b3cb2a466cdbef9ea19cee24.r2.cloudflarestorage.com
     s3Credentials:
       accessKeyId:
