@@ -22,7 +22,7 @@ resources:
 
 replicas:
   - name: ente-museum
-    count: 3
+    count: 8
   - name: ente-web
     count: 2
 
