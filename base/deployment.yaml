@@ -54,10 +54,7 @@ spec:
             periodSeconds: 30
           resources:
             limits:
-              cpu: 1000m
-              memory: 1Gi
-            requests:
-              cpu: 100m
+              cpu: 200m
               memory: 256Mi
           volumeMounts:
             - name: museum-data
@@ -126,8 +123,5 @@ spec:
               port: web
           resources:
             limits:
-              cpu: 50m
+              cpu: 100m
               memory: 256Mi
-            requests:
-              cpu: 25m
-              memory: 64Mi

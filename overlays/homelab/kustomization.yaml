@@ -20,6 +20,12 @@ resources:
   - object-store.yaml
   - scheduled-backup.yaml
 
+replicas:
+  - name: ente-museum
+    count: 3
+  - name: ente-web
+    count: 2
+
 components:
   - ../../components/cloudnativepg
   - ../../components/museum-config
