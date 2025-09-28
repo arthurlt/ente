@@ -21,8 +21,8 @@ resources:
   - scheduled-backup.yaml
 
 replicas:
-  - name: ente-museum
-    count: 8
+  # - name: ente-museum
+  #   count: 8
   - name: ente-web
     count: 2
 
@@ -32,6 +32,7 @@ components:
   - ../../components/museum-secrets
   - ../../components/external-secrets
   - ../../components/replace-hostname
+  - ../../components/autoscaler
 
 patches:
   - target:
