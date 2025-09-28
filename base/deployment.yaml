@@ -53,9 +53,12 @@ spec:
               port: http
             periodSeconds: 30
           resources:
-            limits:
+            requests:
               cpu: 50m
               memory: 128Mi
+            limits:
+              cpu: 100m
+              memory: 196Mi
           volumeMounts:
             - name: museum-data
               mountPath: /data
@@ -122,6 +125,9 @@ spec:
               path: /
               port: web
           resources:
+            requests:
+              cpu: 25m
+              memory: 64Mi
             limits:
               cpu: 50m
               memory: 128Mi
