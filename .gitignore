@@ -3,3 +3,6 @@
 
 # Ignore Wrangler state/config
 .wrangler/
+
+# Ignore Sublime Text Workspace
+*.sublime-workspace
