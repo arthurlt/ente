@@ -4,3 +4,9 @@ kind: Component
 
 resources:
   - hpa.yaml
+
+patches:
+  - target:
+      kind: Deployment
+      name: "ente-.*"
+    path: remove-replicas.patch.yaml
