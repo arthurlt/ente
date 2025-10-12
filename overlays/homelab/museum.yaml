@@ -10,6 +10,6 @@ s3:
 
 smtp:
   host: smtp.fastmail.com
-  port: 587
+  port: 465
   sender-name: Ente
-  encryption: tls
+  encryption: ssl
