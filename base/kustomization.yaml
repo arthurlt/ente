@@ -4,9 +4,9 @@ kind: Kustomization
 
 images:
   - name: ghcr.io/ente-io/server
-    newTag: 613c6a96390d7a624cf30b946955705d632423cc
+    newTag: 1119f7abf19c529f29dc7cad7bf249ce35f38a05
   - name: ghcr.io/ente-io/web
-    newTag: 781ac5d269908e311a28010644a46c5bc11f23f0
+    newTag: 19219bdcb6cff3b8c6a70d51a3343080ec7619ea
 
 resources:
   - deployment.yaml
