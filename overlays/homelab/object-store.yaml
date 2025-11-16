@@ -17,4 +17,4 @@ spec:
         key: secretKey
     wal:
       maxParallel: 8
-  retentionPolicy: '6m'
+  retentionPolicy: '35d'
