@@ -17,3 +17,7 @@
       isWALArchiver: true
       parameters:
         barmanObjectName: ente-database-bucket
+
+- op: add
+  path: /spec/primaryUpdateMethod
+  value: switchover
