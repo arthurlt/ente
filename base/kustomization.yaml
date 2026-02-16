@@ -4,11 +4,13 @@ kind: Kustomization
 
 images:
   - name: ghcr.io/ente-io/server
-    newTag: fa30e7c7bf695b1af49b895a72e4de86fb791e09
+    newTag: latest
   - name: ghcr.io/ente-io/web
-    newTag: 87aca6c53d3ef22fc0119624f8a465d71571c88c
+    newTag: latest
 
 resources:
   - deployment.yaml
   - ingress.yaml
+  - pdb.yaml
+  - sa.yaml
   - service.yaml
