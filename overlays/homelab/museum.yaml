@@ -12,4 +12,3 @@ smtp:
   host: smtp.fastmail.com
   port: 587
   sender-name: Ente
-  encryption: tls
