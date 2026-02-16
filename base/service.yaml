@@ -44,5 +44,9 @@ spec:
       port: 3004
       targetPort: cast
       protocol: TCP
+    - name: locker
+      port: 3005
+      targetPort: locker
+      protocol: TCP
   selector:
     app.kubernetes.io/component: frontend
