@@ -10,3 +10,9 @@
   value:
     name: ENTE_ALBUMS_ORIGIN
     value: https://albums.ente.example
+
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: ENTE_PHOTOS_ORIGIN
+    value: https://web.ente.example
