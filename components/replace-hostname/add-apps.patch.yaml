@@ -16,13 +16,12 @@
   value:
     name: ENTE_APPS_ACCOUNTS
     value: https://accounts.ente.example
-# appears to be in development
-# - op: add
-#   path: /spec/template/spec/containers/0/env/-
-#   value:
-#     name: ENTE_APPS_PUBLIC_LOCKER
-#     value: https://locker.ente.example
 
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: ENTE_APPS_PUBLIC_LOCKER
+    value: https://locker.ente.example
 # appears to only be a landing page
 # - op: add
 #   path: /spec/template/spec/containers/0/env/-
