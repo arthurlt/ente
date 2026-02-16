@@ -57,3 +57,13 @@ spec:
                 name: ente-web
                 port:
                   name: web
+    - host: locker.ente.example
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: ente-web
+                port:
+                  name: locker

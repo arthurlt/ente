@@ -139,6 +139,12 @@ spec:
             - name: cast
               containerPort: 3004
               protocol: TCP
+            - name: locker
+              containerPort: 3005
+              protocol: TCP
+            # - name: embed
+            #   containerPort: 3006
+            #   protocol: TCP
           livenessProbe:
             httpGet:
               path: /
