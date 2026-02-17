@@ -48,5 +48,9 @@ spec:
       port: 3005
       targetPort: locker
       protocol: TCP
+    - name: embed
+      port: 3006
+      targetPort: embed
+      protocol: TCP
   selector:
     app.kubernetes.io/component: frontend

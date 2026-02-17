@@ -22,6 +22,12 @@
   value:
     name: ENTE_APPS_PUBLIC_LOCKER
     value: https://locker.ente.example
+
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: ENTE_APPS_EMBED_ALBUMS
+    value: https://embed.ente.example
 # appears to only be a landing page
 # - op: add
 #   path: /spec/template/spec/containers/0/env/-

@@ -67,3 +67,13 @@ spec:
                 name: ente-web
                 port:
                   name: locker
+    - host: embed.ente.example
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: ente-web
+                port:
+                  name: embed
